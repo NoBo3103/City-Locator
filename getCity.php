@@ -10,6 +10,7 @@ if(!isset($_POST['searchTerm'])){
 
 $data = array();
 while ($row = mysqli_fetch_array($fetchData)) {    
-  $data[] = array("id"=>$row['id'], "text"=>$row['city']);
+  $data[] = array("id"=>$row['id'], "text"=>$row['city'], "lat" => $row['lat'] , "lng" => $row["lng"], "country" => $row['country'] , "iso2" => $row['iso2'] , "state" => $row['admin'], "population" => $row['population_proper'], "capital" => $row['capital']);
 }
+
 echo json_encode($data);

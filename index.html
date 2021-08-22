@@ -3,6 +3,7 @@
         <title>
             Germin8 Task
         </title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
         <link href='https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css' rel='stylesheet' type='text/css'>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -10,18 +11,127 @@
         
     </head>
     <body>
-        <div>
-            <select id='selUser' style='width: 200px;'>
-                <option value='0'>Choose your City</option>
+        <div style="
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: column;
+        align-content: space-around;
+        align-items: center;">
+            <h1>India Map</h1>
+            <select id='selCity' style='width: 500px;'>
+                <option value=''></option>
                </select>
         </div>
-    
-        <div id="dvMap" style="width: 500px; height: 500px;">
+        <div style="float: left; width: 50%; height: 600px; margin-top: 2rem;">
+            <table class="table table-hover ">
+                <tr>
+                    <th>City</th>
+                    <td id="city"></td>
+                </tr>
+                <tr>
+                    <th>State</th>
+                    <td id="state"></td>
+                </tr>
+                <tr>
+                    <th>Country</th>
+                    <td id="country"></td>
+                </tr>
+                <tr>
+                    <th>ISO2 Code</th>
+                    <td id="iso2"></td>
+                </tr>
+                <tr>
+                    <th>Capital</th>
+                    <td id="capital"></td>
+                </tr>
+                <tr>
+                    <th>Population</th>
+                    <td id="population"></td>
+                </tr>
+              </table>
         </div>
-        <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+        <div id="dvMap" style="float: right; width: 50%; height: 600px; margin-top: 2rem;"></div>
+        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBBtDQD5KQma2D8F2mHx1ikQPHpS5d1Dqw&callback=initMap"></script>
 
         <script>
-            if (navigator.geolocation) {
+    $(document).ready(function(){
+    $lat = 0;
+    $lng = 0;
+    $city = null;
+    $state = null;
+    $capital = null;
+    $population = 0;
+    $country = null;
+    $iso2 = null;
+    $("#selCity").select2({
+        placeholder: "Enter your City Name",
+        minimumInputLength: 3,
+     ajax: { 
+      url: "getCity.php",
+      type: "post",
+      dataType: 'json',
+      delay: 250,
+      data: function (params) {
+        $city = params.term;
+       return {
+         searchTerm: params.term 
+       };
+      },
+      processResults: function (response) {
+        console.log(response);
+        $OptionSelected = $('#selCity').val();
+        console.log($OptionSelected);
+        if(response.length==1){
+            $lat = response[0].lat;
+            $lng = response[0].lng;
+            $state = response[0].state;
+            $capital = (response[0].capital=="admin" ? "Yes": "No");
+            $population = response[0].population;
+            $country = response[0].country;
+            $iso2 = response[0].iso2;
+            indiamap($lat, $lng);
+            console.log($city, $state, $country, $capital, $population, $country, $iso2);
+            displayCell($city, $state, $country, $capital, $population, $country, $iso2);
+        }
+        console.log($lat, $lng);
+        return {
+           results: response
+        };
+        
+      },
+      cache: true
+     }
+    });
+    });
+    function displayCell(city, state, country, capital, population, country, iso2){
+        document.querySelector('#city').innerHTML = city;
+        document.querySelector('#capital').innerHTML = capital;
+        document.querySelector('#state').innerHTML = state;
+        document.querySelector('#country').innerHTML = country;
+        document.querySelector('#iso2').innerHTML = iso2;
+        document.querySelector('#population').innerHTML = population;
+    }
+    function indiamap(lat, lng){
+        var LatLng = new google.maps.LatLng(lat, lng);
+        var mapOptions = {
+            center: LatLng,
+            zoom: 12,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        console.log(lat, lng);
+        var map = new google.maps.Map(document.getElementById("dvMap"), mapOptions);
+        var marker = new google.maps.Marker({
+            position: LatLng,
+            map: map,
+            title: "<div style = 'height:60px;width:100vw;'><b>Your location:</b><br />Latitude: " + lat + "<br />Longitude: " + lng
+        });
+        google.maps.event.addListener(marker, "click", function (e) {
+            var infoWindow = new google.maps.InfoWindow();
+            infoWindow.setContent(marker.title);
+            infoWindow.open(map, marker);
+        });
+    }
+    if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function (p) {
         var LatLng = new google.maps.LatLng(p.coords.latitude, p.coords.longitude);
         var mapOptions = {
@@ -33,7 +143,7 @@
         var marker = new google.maps.Marker({
             position: LatLng,
             map: map,
-            title: "<div style = 'height:60px;width:200px'><b>Your location:</b><br />Latitude: " + p.coords.latitude + "<br />Longitude: " + p.coords.longitude
+            title: "<div style = 'height:60px;width:100vw;'><b>Your location:</b><br />Latitude: " + p.coords.latitude + "<br />Longitude: " + p.coords.longitude
         });
         google.maps.event.addListener(marker, "click", function (e) {
             var infoWindow = new google.maps.InfoWindow();
@@ -44,30 +154,8 @@
 } else {
     alert('Geo Location feature is not supported in this browser.');
 }
-        </script>
-    <script>
-        $(document).ready(function(){
-    
-    $("#selUser").select2({
-     ajax: { 
-      url: "getCity.php",
-      type: "post",
-      dataType: 'json',
-      delay: 250,
-      data: function (params) {
-       return {
-         searchTerm: params.term 
-       };
-      },
-      processResults: function (response) {
-        return {
-           results: response
-        };
-      },
-      cache: true
-     }
-    });
-    });
+
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     </body>
 </html>
