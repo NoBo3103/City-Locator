@@ -8,10 +8,20 @@
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src='https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js'></script>
-        
+        <style>
+            *{
+                color: tomato;
+            }
+            body{
+                background: #0F2027;  
+                background: -webkit-linear-gradient(to right, #2C5364, #203A43, #0F2027);  
+                background: linear-gradient(to right, #2C5364, #203A43, #0F2027); 
+            }
+        </style>
     </head>
     <body>
-        <div style="
+        <div style="padding: 20px;">
+            <div style="
         display: flex;
         flex-wrap: wrap;
         flex-direction: column;
@@ -22,38 +32,40 @@
                 <option value=''></option>
                </select>
         </div>
-        <div style="float: left; width: 50%; height: 600px; margin-top: 2rem;">
-            <table class="table table-hover ">
+        <div style="float: left; width: 49%; height: 500px; margin-top: 2rem; margin-right: 10px;">
+            <table class="table table-hover" style="height: 500px; border: 2px whitesmoke solid; border-collapse: collapse;">
                 <tr>
-                    <th>City</th>
+                    <th style="border: 2px whitesmoke solid; width: 50%;">City</th>
                     <td id="city"></td>
                 </tr>
                 <tr>
-                    <th>State</th>
+                    <th style="border: 2px whitesmoke solid; width: 50%;">State</th>
                     <td id="state"></td>
                 </tr>
                 <tr>
-                    <th>Country</th>
+                    <th style="border: 2px whitesmoke solid; width: 50%;">Country</th>
                     <td id="country"></td>
                 </tr>
                 <tr>
-                    <th>ISO2 Code</th>
+                    <th style="border: 2px whitesmoke solid; width: 50%;">ISO2 Code</th>
                     <td id="iso2"></td>
                 </tr>
                 <tr>
-                    <th>Capital</th>
+                    <th style="border: 2px whitesmoke solid; width: 50%;">Capital</th>
                     <td id="capital"></td>
                 </tr>
                 <tr>
-                    <th>Population</th>
+                    <th style="border: 2px whitesmoke solid; width: 50%;">Population</th>
                     <td id="population"></td>
                 </tr>
               </table>
         </div>
-        <div id="dvMap" style="float: right; width: 50%; height: 600px; margin-top: 2rem;"></div>
+        <div id="dvMap" style="float: right; width: 49%; height: 500px; margin-top: 2rem; margin-left: 10px;"></div>
         <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBBtDQD5KQma2D8F2mHx1ikQPHpS5d1Dqw&callback=initMap"></script>
-
-        <script>
+    </div>
+    
+        <p style="transform: translateY(30px); text-align: center;">Made by Nabaneet Mondal</p>
+    <script>
     $(document).ready(function(){
     $lat = 0;
     $lng = 0;
