@@ -3,54 +3,71 @@
         <title>
             Germin8 Task
         </title>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.css" integrity="sha512-p209YNS54RKxuGVBVhL+pZPTioVDcYPZPYYlKWS9qVvQwrlzxBxkR8/48SCP58ieEuBosYiPUS970ixAfI/w/A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <link href='https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css' rel='stylesheet' type='text/css'>
 
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js'></script>
+        
     </head>
     <body>
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <h1 style="text-align: center;">India Map</h1>
-                </div>
-                <div class="col-md-6 col-md-offset-3">
-                    <div class="form-group">
-                        <label for="">Select City</label>
-                        <select name="" id="" class="selectjs form-control">
-                            <option value=""></option>
-                        </select>
-                    </div>
-                </div>
-            </div>
+        <div>
+            <select id='selUser' style='width: 200px;'>
+                <option value='0'>Choose your City</option>
+               </select>
         </div>
-        
-        
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.js" integrity="sha512-tvs4l2C3VPcCHzUU1KGG+jWWTO7H0stvk1jwn6pr4B1uimcL/2api3rnmkMhVQ6DglgxLcqyLSDS1IF5eyeTRg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
+        <div id="dvMap" style="width: 500px; height: 500px;">
+        </div>
+        <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+
         <script>
-            $(document).ready(function(){
-                $(".selectjs").select2({
-                    placeholder: "Enter city name", 
-                    minimumInputLength: 3, 
-                    ajax: {
-                        url: "getCity.php",
-                        dataType: "json",
-                        type: "GET",
-                        delay: 250,
-                        data: function(params){
-                            return{
-                                q: params.term,
-                            };
-                        },
-                        processResults: function(data){
-                            return{
-                                results: data
-                            };
-                        },
-                        cache: true
-                    }
-                });
-            });
+            if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function (p) {
+        var LatLng = new google.maps.LatLng(p.coords.latitude, p.coords.longitude);
+        var mapOptions = {
+            center: LatLng,
+            zoom: 13,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        var map = new google.maps.Map(document.getElementById("dvMap"), mapOptions);
+        var marker = new google.maps.Marker({
+            position: LatLng,
+            map: map,
+            title: "<div style = 'height:60px;width:200px'><b>Your location:</b><br />Latitude: " + p.coords.latitude + "<br />Longitude: " + p.coords.longitude
+        });
+        google.maps.event.addListener(marker, "click", function (e) {
+            var infoWindow = new google.maps.InfoWindow();
+            infoWindow.setContent(marker.title);
+            infoWindow.open(map, marker);
+        });
+    });
+} else {
+    alert('Geo Location feature is not supported in this browser.');
+}
         </script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function(){
+    
+    $("#selUser").select2({
+     ajax: { 
+      url: "getCity.php",
+      type: "post",
+      dataType: 'json',
+      delay: 250,
+      data: function (params) {
+       return {
+         searchTerm: params.term 
+       };
+      },
+      processResults: function (response) {
+        return {
+           results: response
+        };
+      },
+      cache: true
+     }
+    });
+    });
+    </script>
     </body>
 </html>
