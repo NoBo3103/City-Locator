@@ -40,7 +40,7 @@
         <div style="float: left; width: 49%; height: 500px; margin-top: 2rem; margin-right: 10px;">
             <table class="table table-hover" style="height: 500px; border: 2px whitesmoke solid; border-collapse: collapse;">
                 <tr>
-                    <th style="border: 2px whitesmoke solid; width: 50%;">City</th>
+                    <th style="border: 2px whitesmoke solid; width: 50%;">Latitude, Longitude</th>
                     <td id="city"></td>
                 </tr>
                 <tr>
@@ -107,8 +107,8 @@
             $country = response[0].country;
             $iso2 = response[0].iso2;
             indiamap($lat, $lng);
-            console.log($city, $state, $country, $capital, $population, $country, $iso2);
-            displayCell($city, $state, $country, $capital, $population, $country, $iso2);
+            console.log($lat, $lng, $state, $country, $capital, $population, $country, $iso2);
+            displayCell($lat, $lng, $state, $country, $capital, $population, $country, $iso2);
         }
         console.log($lat, $lng);
         return {
@@ -120,8 +120,8 @@
      }
     });
     });
-    function displayCell(city, state, country, capital, population, country, iso2){
-        document.querySelector('#city').innerHTML = city;
+    function displayCell(lat, lng, state, country, capital, population, country, iso2){
+        document.querySelector('#city').innerHTML = lat + ", " + lng; 
         document.querySelector('#capital').innerHTML = capital;
         document.querySelector('#state').innerHTML = state;
         document.querySelector('#country').innerHTML = country;
