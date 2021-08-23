@@ -102,7 +102,7 @@
             $lat = response[0].lat;
             $lng = response[0].lng;
             $state = response[0].state;
-            $capital = (response[0].capital=="admin"||"minor" ? "Yes": "No");
+            $capital = ((response[0].capital=="admin")||(response[0].capital=="minor")? "Yes": "No");
             $population = response[0].population;
             $country = response[0].country;
             $iso2 = response[0].iso2;
