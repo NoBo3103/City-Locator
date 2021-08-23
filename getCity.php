@@ -2,10 +2,10 @@
 include 'config.php';
 
 if(!isset($_POST['searchTerm'])){ 
-  $fetchData = mysqli_query($con,"select * from india_map_excel order by city limit 5");
+  $fetchData = mysqli_query($con,"select * from india_map_excel order by city limit 1");
 }else{ 
   $search = $_POST['searchTerm'];   
-  $fetchData = mysqli_query($con,"select * from india_map_excel where city like '%".$search."%' limit 5");
+  $fetchData = mysqli_query($con,"select * from india_map_excel where city like '%".$search."%' limit 1");
 } 
 
 $data = array();
