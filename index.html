@@ -9,13 +9,16 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src='https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js'></script>
         <style>
-            *{
-                color: tomato;
+            h1{
+                color: #4285F4;
+            }
+            tr, p{
+                color: navajowhite;
             }
             body{
-                background: #0F2027;  
-                background: -webkit-linear-gradient(to right, #2C5364, #203A43, #0F2027);  
-                background: linear-gradient(to right, #2C5364, #203A43, #0F2027); 
+                background: #000000;  
+                background: -webkit-linear-gradient(to right, #434343, #000000); 
+                background: linear-gradient(to right, #434343, #000000); 
             }
             
         </style>
@@ -99,7 +102,7 @@
             $lat = response[0].lat;
             $lng = response[0].lng;
             $state = response[0].state;
-            $capital = (response[0].capital=="admin" ? "Yes": "No");
+            $capital = (response[0].capital=="admin"||"minor" ? "Yes": "No");
             $population = response[0].population;
             $country = response[0].country;
             $iso2 = response[0].iso2;
